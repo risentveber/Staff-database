@@ -1,5 +1,5 @@
 <?php
-	require_once "../connection.php";
+	require_once "../scripts/connection.inc";
 ?>
 <!DOCTYPE html>
 <head>
@@ -29,11 +29,13 @@
 			if (isset($_REQUEST['sector_id'])){
 				$sector_id = $_REQUEST['sector_id'];
 
-				$q = mysql_query("SELECT `Название сектора`, `Название подразделения`
-					FROM `Сектора`
-					LEFT JOIN `Подразделения`
-					ON `Подразделения`.`id` = `Подразделения_id`
-					WHERE `Сектора`.`id` = $sector_id;");
+				$q = mysql_query(
+					"SELECT `sector_name`, `unit_name`
+					FROM `sectors`
+					LEFT JOIN `units`
+					ON `units`.`id` = `unit_id`
+					WHERE `sectors`.`id` = $sector_id;"
+					);
 
 				$sector_name = mysql_result($q, 0, 0);
 				$unit_name = mysql_result($q, 0, 1);
@@ -41,9 +43,11 @@
 				echo '<h3>'.$unit_name."</h3>\n";
 				echo '<h4>'.$sector_name."</h4>\n";
 
-				$q = mysql_query("SELECT `Имя`,`Фамилия`, `id`
-									FROM  `Сотрудники`
-									WHERE `Сектор_id` = $sector_id;");
+				$q = mysql_query(
+					"SELECT `name`, `surname`, `id`
+					FROM  `employees`
+					WHERE `sector_id` = $sector_id;"
+					);
 
 				$rows = mysql_num_rows($q);
 				if ($rows == 0){

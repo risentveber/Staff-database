@@ -1,5 +1,8 @@
+<?php 
+	require_once "../scripts/patterns.inc"; 
+	require_once "../scripts/connection.inc";
+?>
 <!DOCTYPE html>
-<?php include("../patterns.php"); ?>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
 	<title>Добавление сектора</title>
@@ -14,7 +17,7 @@
 		</header>
 		<nav class="navbar navbar-inverse" role="navigation">
 			<ul class="nav navbar-nav" >
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
@@ -31,12 +34,16 @@
 				<br>
 			 	<div class="input-group">			
 				<?php
-					include("../connection.php");
+					include();
 		
 					$str ="\n<option></option>\n";
 
-					$q = mysql_query("SELECT `id`, `Название подразделения` FROM `Подразделения`
-										ORDER BY `Название подразделения`;");
+					$q = mysql_query(
+						"SELECT `id`, `unit_name`
+						FROM `units`
+						ORDER BY `unit_name`;"
+						);
+
 					$rows = mysql_num_rows($q);
 					$fields = mysql_num_fields($q);
 					for ($c = 0; $c < $rows; $c++) {
@@ -44,7 +51,7 @@
 					}
 					$str=$str.'</select>'."\n\n";
 					
-					echo '  <div class="input-group-addon">Подразделение:</div>';
+					echo '<div class="input-group-addon">Подразделение:</div>';
 					echo '<select required name="unit_id" class="form-control">';
 					echo $str;
 				?>

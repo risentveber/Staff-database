@@ -1,5 +1,5 @@
 <?php
-	require_once "../connection.php"; 
+	require_once "../scripts/connection.inc"; 
 ?>
 <!DOCTYPE html>
 <head>
@@ -25,19 +25,20 @@
 		<br>
 			<?php 
 				 
-				if (isset($_REQUEST['add'])){ 
-					$sector_name = pre_string($_REQUEST['sector_name']);
-					$unit_id = $_REQUEST['unit_id'];    
-					$sql_add = "INSERT INTO `Сектора`
-									(`Название сектора`, `Подразделения_id`)
-								VALUES ($sector_name, $unit_id);";      
+				if (isset($_POST['add'])){ 
+					$sector_name = pre_string($_POST['sector_name']);
+					$unit_id = $_POST['unit_id'];          
 					        
-					$q = mysql_query($sql_add);
+					$q = mysql_query(
+						"INSERT INTO `sectors`
+						(`sector_name`, `unit_id`)
+						VALUES ($sector_name, $unit_id);"
+						);
+
 					if ($q)
-						print('<div class="alert alert-success col-md-8""><p>Спасибо, сектор зарегестрирован в базе данных</p>');  
+						print_success_message("Спасибо, сектор $sector_name зарегестрирован в базе данных");  
 					else
-						echo '<div class="alert alert-danger col-md-8""><p>Произошла ошибка '.mysql_errno()." ".mysql_error().'</p>';
-					echo "</div>"; 
+						print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error());
 				}
 			?>
 		</div>
