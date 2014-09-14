@@ -1,5 +1,5 @@
 <?php 
-	require_once "../patterns.php"; 
+	require_once "../scripts/patterns.inc"; 
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +17,7 @@
 		</header>
 		<nav class="navbar navbar-inverse" role="navigation">
 			<ul class="nav navbar-nav" >
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>

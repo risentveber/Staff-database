@@ -1,3 +1,6 @@
+<?php
+	require_once "../scripts/connection.inc"
+?>					
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -13,7 +16,7 @@
 		</header>
 		<nav class="navbar navbar-inverse">
 			<ul class="nav navbar-nav">
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
@@ -22,15 +25,17 @@
 		<div class="col-md-8">
 			<br>
 			<?php
-				include("../connection.php");
 				if (isset($_REQUEST['publication_id'])){
 					$publication_id = $_REQUEST['publication_id'];
 
-					$q = mysql_query("SELECT `Название публикации`,`Год публикации`, `Полное название журнала`
-						FROM `Публикации`
-						LEFT JOIN `Издания`
-						ON `Публикации`.`Издания_id` = `Издания`.`id`
-						WHERE `Публикации`.`id` = $publication_id;");
+					$q = mysql_query(
+						"SELECT `publication_name`,`year`, `edition_name`
+						FROM `publications`
+						LEFT JOIN `editions`
+						ON `edition_id` = `editions`.`id`
+						WHERE `publications`.`id` = $publication_id;"
+						);
+
 					$title = mysql_result($q, 0, 0);
 					$year = mysql_result($q, 0, 1);
 					$edition = mysql_result($q, 0, 2);
@@ -39,11 +44,13 @@
 					echo "<h4>Год издания: $year</h4>\n";
 					echo "<h4>Издательство: $edition</h4>\n";
 
-					$q = mysql_query("SELECT `Имя`,`Фамилия`,`Сотрудники_id`
-										FROM  `Авторы-Публикации`
-										LEFT JOIN `Сотрудники`
-										ON `id`= `Сотрудники_id`
-										WHERE `Публикации_id`= $publication_id;");
+					$q = mysql_query(
+						"SELECT `name`,`surname`,`employee_id`
+						FROM  `authors-publications`
+						LEFT JOIN `employees`
+						ON `id`= `employee_id`
+						WHERE `publication_id`= $publication_id;"
+						);
 
 					$rows = mysql_num_rows($q);
 					if ($rows == 0)

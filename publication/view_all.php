@@ -1,3 +1,7 @@
+<?php
+	require_once "../scripts/connection.inc";
+?>
+
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -22,14 +26,15 @@
 				<H4>Публикации</H4>
 				<div class="col-md-8">
 					<?php
-						include("../connection.php");
+						
 						$str ="\n".'<table border="1">'."\n";
 
-						$q = mysql_query("SELECT `Название публикации`, `Полное название журнала`, `Публикации`.`id`
-											FROM `Публикации`
-											LEFT JOIN `Издания`
-											ON `Публикации`.`Издания_id`= `Издания`.`id`
-											ORDER BY `Название публикации`;");
+						$q = mysql_query(
+							"SELECT `publication_name`, `edition_name`, `publications`.`id`
+											FROM `publications`
+											LEFT JOIN `editions`
+											ON `publications`.`edition_id`= `editions`.`id`
+											ORDER BY `publication_name`;");
 						$rows = mysql_num_rows($q);
 
 						$str=$str."<tr><th>Название</th><th>Издание</th></tr>\n";

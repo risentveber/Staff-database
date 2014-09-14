@@ -1,6 +1,6 @@
 <?php 
-	require_once "../patterns.php";
-	require_once "../connection.php"; 
+	require_once "../scripts/patterns.inc";
+	require_once "../scripts/connection.inc"; 
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +18,7 @@
 		</header>
 		<nav class="navbar navbar-inverse" role="navigation">
 			<ul class="nav navbar-nav" >
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
@@ -29,32 +29,34 @@
 				<H4>Информация о публикации:</H4>
 
 				<?php 
-					if (isset($_REQUEST['add'])){         
-						$count = $_REQUEST['count'];
+					if (isset($_POST['add'])){         
+						$count = $_POST['count'];
 						$count = 0 + $count;              
 					}
 					echo "\n";
 					//***************************************************************************************
 					$str ='<option></option>';
 
-					$q = mysql_query("SELECT `id`,`Имя`, `Фамилия`
-									FROM `Сотрудники`
-									ORDER BY `Фамилия`, `Имя`;");//ожидается список авторов <id> <имя> <фамилия>
+					$q = mysql_query(
+						"SELECT `id`, `name`, `surname`
+						FROM `employees`
+						ORDER BY `surname`, `name`;"
+						);
+
 					$rows = mysql_num_rows($q);
 					$fields = mysql_num_fields($q);
 					for ($c = 0; $c < $rows; $c++) {
 						$str=$str.'<option value = "'.mysql_result($q, $c, 0).'">'.mysql_result($q, $c, 2).' '.mysql_result($q, $c, 1).'</option>';
 					}
-					$str=$str.'</select></div><br>'."\n\n";
+					$str=$str."</select></div><br>\n\n";
 					//****************************************************************************************
 					for ($c=1; $c<=$count; $c++){
 						$tname = 'name'.(string)$c;
-						//echo 'автор '.(string)$c.': <br><input name="'.(string)$tname.'" size="45" type="text"><br>'."\n";
 						echo '<div class="input-group">	<div class="input-group-addon">Автор '.(string)$c.':</div>';
 						echo'<select class="form-control" required name="'.(string)$tname.'" >';
 						echo $str;
-						}
-						//echo'<input name="'.(string)$tname.'" />'
+					}
+						
 				?>
 				<br>
 				
@@ -63,7 +65,7 @@
 				</div><br>
 				<div class="input-group">
 		 			<div class="input-group-addon">Полное количество авторов:</div>
-		 			<input class="form-control" required name="count_all" type="number" min="1" max="50">
+		 			<input class="form-control" required name="count_all" type="number" min=<?php echo "'$count'";?> max="50">
 				</div>
 				<div class="input-group">
 		 			<div class="input-group-addon">Год издания:</div>
@@ -79,9 +81,11 @@
 					<?php
 						$str ='<option></option>';
 
-						$q = mysql_query("SELECT `id`,`Полное название журнала`
-											FROM `Издания`
-											ORDER BY `Полное название журнала`;");//ожидается список изданий <id> <издание>
+						$q = mysql_query(
+							"SELECT `id`,`edition_name`
+							FROM `editions`
+							ORDER BY `edition_name`;"
+							);
 						$rows = mysql_num_rows($q);
 						$fields = mysql_num_fields($q);
 						for ($c = 0; $c < $rows; $c++) {

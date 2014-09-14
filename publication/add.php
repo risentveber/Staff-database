@@ -1,3 +1,6 @@
+<?php 
+	require_once "../connection.php"; 
+?>
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -13,7 +16,7 @@
 		</header>
 		<nav class="navbar navbar-inverse" role="navigation">
 			<ul class="nav navbar-nav" >
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
@@ -21,34 +24,34 @@
 		<div class="container">
 		<br>
 		<?php 
-			include ("../connection.php");    
-			if (isset($_REQUEST['add'])){
+			if (isset($_POST['add'])){
 
-				$title = pre_string($_REQUEST['title']);
-				$year = $_REQUEST['year'];
-				$edition = $_REQUEST['edition'];
-				$info = pre_string($_REQUEST['info']);
-				$count_all = $_REQUEST['count_all'];
+				$title = pre_string($_POST['title']);
+				$year = $_POST['year'];
+				$edition = $_POST['edition'];
+				$info = pre_string($_POST['info']);
+				$count_all = $_POST['count_all'];
 				
-				$sql_add = "INSERT INTO `Публикации`
-								(`Издания_id`, `Название публикации`, `Год публикации`, `Полная библиографическая ссылка`, `Число авторов`)
-							VALUES ($edition, $title, $year, $info, $count_all);"; 
-				$result = mysql_query($sql_add); 
+				$q = mysql_query(
+					"INSERT INTO `publications`
+					(`edition_id`, `publication_name`, `year`, `full_bibliographic_reference`, `number_of_authors`)
+					VALUES ($edition, $title, $year, $info, $count_all);"
+					); 
 				
-				if ($result){
+				if ($q){
 					$count = 0;
 					$publication_id = mysql_insert_id();
-					while ( isset($_REQUEST['name'.++$count]) ) {
-						$employee_id = $_REQUEST['name'.$count];
-						$sql_add = "INSERT INTO `Авторы-Публикации`
-								(`Сотрудники_id`, `Публикации_id`)
-							VALUES ($employee_id, $publication_id);"; 
-						$result = mysql_query($sql_add); 
+					while ( isset($_POST['name'.++$count]) ) {
+						$employee_id = $_POST['name'.$count];
+						$q = mysql_query(
+							"INSERT INTO `authors-publications`
+							(`employee_id`, `publication_id`)
+							VALUES ($employee_id, $publication_id);"
+							); 
 					}					
-					echo '<div class="alert alert-success col-md-8""><p>Спасибо, вы зарегистрированы в базе данных</p>';   
+					print_success_message("Публикация $title зарегестрирована в базе данных")ж  
 				}else
-					echo '<div class="alert alert-danger col-md-8""><p>Произошла ошибка '.mysql_errno()." ".mysql_error().'</p>';
-				echo "</div>"; 
+					print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error()."</p>"); 
 					  
 			}
 		?>
