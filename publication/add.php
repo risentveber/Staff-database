@@ -1,5 +1,6 @@
 <?php 
-	require_once "../connection.php"; 
+	require_once "../scripts/connection.inc"; 
+	require_once "../scripts/functions.inc";
 ?>
 <!DOCTYPE html>
 <head>
@@ -49,7 +50,7 @@
 							VALUES ($employee_id, $publication_id);"
 							); 
 					}					
-					print_success_message("Публикация $title зарегестрирована в базе данных")ж  
+					print_success_message("Публикация $title зарегестрирована в базе данных"); 
 				}else
 					print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error()."</p>"); 
 					  

@@ -32,14 +32,15 @@ if (isset($_POST['view'])){
 	$sector_name = mysql_result($q, 0, 0);
 	$unit_name = mysql_result($q, 0, 1);
 	
+	$str = $str."##########################################################################\n";
 	$str = $str."Личная информация\n";
-	$str = $str."#####################################\n";
+	$str = $str."##########################################################################\n";
 	$str = $str."          Имя: ".$name."\n";
 	$str = $str."      Фамилия: ".$surname."\n";
 	$str = $str."     Отчество: ".$patronymic."\n";
 	$str = $str."Подразделение: ".$unit_name."\n";
 	$str = $str."       Сектор: ".$sector_name."\n";
-	$str = $str."#####################################\n\n";
+	$str = $str."\n";
 	echo $str;
 	
 	$q = mysql_query(
@@ -47,29 +48,40 @@ if (isset($_POST['view'])){
 		FROM `authors-publications`
 		LEFT JOIN `publications`
 		ON `publication_id` = `publications`.`id` 
-		LEFT JOIN `editons`
-		ON `editon_id` = `editions`.`id`
+		LEFT JOIN `editions`
+		ON `edition_id` = `editions`.`id`
 		WHERE `employee_id` = $employee_id;"
 		);
 
 	$unit = mysql_result($q, 0, 0);
 
 	$rows = mysql_num_rows($q);
+	$first = true;
+
 	if ($rows == 0)
 		echo "В публикационной деятельности замечен не был\n";
 	else{
-		$str = "Публикации\n";
+		$str = "##########################################################################\n";
+		$str = $str."Публикации\n";
+		$str = $str."##########################################################################\n";
 		$sum = 0;
-		$sum_str = "0";
+		$sum_str = "";
+
 		for ($c = 0; $c < $rows; $c++){
 				$str=$str."\nНазвание: ".mysql_result($q, $c, 0);
 				$str=$str."\n     Год: ".mysql_result($q, $c, 1);
 				$str=$str."\n Издание: ".mysql_result($q, $c, 2);
 				$prnd_str = mysql_result($q, $c, 3)."*".$k."/".mysql_result($q, $c, 4);
 				$prnd = (0+mysql_result($q, $c, 3))*(0+$k)/(0+mysql_result($q, $c, 4));
+				$prnd = round($prnd, 3);
 				$str=$str."\n    ПРНД: $prnd_str = $prnd\n";
 				$sum += $prnd;
-				$sum_str += $prnd_str;
+				if ($first)
+					$first = false;
+				else
+					$sum_str = $sum_str." + ";
+				$str = $str."--------------------------------------------------------------------------\n";
+				$sum_str = $sum_str."$prnd";
 				
 		}
 		echo $str;

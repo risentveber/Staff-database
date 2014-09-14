@@ -28,10 +28,10 @@
 					$str ="\n<table border='1'>\n";
 
 					$q = mysql_query(
-						"SELECT `surname`, `name`, `sector_name`, `employees`.`id`, `secotrs`.`id`, `sector_name`, `units`.`id`
+						"SELECT `surname`, `name`, `sector_name`, `employees`.`id`, `sectors`.`id`, `unit_name`, `units`.`id`
 						FROM `employees`
 						LEFT JOIN `sectors`
-						ON `emoployees`.`sector_id`= `sectors`.`id`
+						ON `employees`.`sector_id`= `sectors`.`id`
 						LEFT JOIN `units`
 						ON `unit_id` = `units`.`id`
 						ORDER BY `surname`,`name`;"

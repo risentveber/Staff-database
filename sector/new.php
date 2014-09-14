@@ -34,8 +34,6 @@
 				<br>
 			 	<div class="input-group">			
 				<?php
-					include();
-		
 					$str ="\n<option></option>\n";
 
 					$q = mysql_query(

@@ -27,11 +27,11 @@
 			<form class="form-inline" action="add.php" method="post">
 			
 				<H4>Персональная информация:</H4>
-				<div class="input-group">              
-					<input class="form-control" required name="name_ru" size="45" type="text" placeholder="Имя" <?php echo $name_ru_pattern; ?>>
-				</div><br>
 				<div class="input-group">
 					<input class="form-control" required name="surname_ru" size="45" type="text" placeholder="Фамилия"<?php echo $name_ru_pattern; ?>>
+				</div><br>
+				<div class="input-group">              
+					<input class="form-control" required name="name_ru" size="45" type="text" placeholder="Имя" <?php echo $name_ru_pattern; ?>>
 				</div><br>
 				<div class="input-group">
 					<input class="form-control" required name="patronymic_ru" size="45" type="text" placeholder="Отчество"<?php echo $name_ru_pattern; ?>>

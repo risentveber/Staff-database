@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
-	<title>Просмотр подразделений</title>
+	<title>Отделы</title>
 	
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -22,11 +22,9 @@
 		</nav>
 		<section>
 			<div class="container">
-				<H4>Подразделения</H4>
+				<H4>Отделы</H4>
 				<div class="col-md-6">
 					<?php
-						$str = "\n<table border='1'>\n";
-						$str = $str."<tr><th>Название подразделения</th></tr>\n";
 
 						$q = mysql_query(
 							"SELECT `unit_name`, `id`
@@ -36,11 +34,22 @@
 
 						$rows = mysql_num_rows($q);
 
-						for ($c = 0; $c < $rows; $c++)
-							$str = $str.'<tr><td><a href="/unit/view.php?unit_id='.mysql_result($q, $c, 1).'">'.mysql_result($q, $c, 0)."<a></td></tr>\n";
-						$str = $str."</table>\n\n";
-					
-						echo $str;
+						for ($c = 0; $c < $rows; $c++){
+							$unit_id = mysql_result($q, $c, 1);
+							$q2 = mysql_query(
+								"SELECT `sector_name`, `id`
+								FROM `sectors`
+								WHERE `unit_id`= $unit_id 
+								ORDER BY `sector_name`;"
+								);
+							$rows2 = mysql_num_rows($q2);
+							$str = "\n<table>\n";
+							$str = $str."<caption>".mysql_result($q, $c, 0)."</caption>\n";
+							for ($c2 = 0; $c2 < $rows2; $c2++)
+								$str = $str.'<tr><td><a href="/sector/view.php?sector_id='.mysql_result($q2, $c2, 1).'">'.mysql_result($q2, $c2, 0)."<a></td></tr>\n";
+							$str = $str."</table><br>\n\n";
+							echo $str;
+						}
 					?>
 					<br>
 				</div>

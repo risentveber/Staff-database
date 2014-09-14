@@ -1,6 +1,6 @@
 <?php
-	require_once "../scritps/connection.inc";
-	require_once "../scritps/functions.inc";
+	require_once "../scripts/connection.inc";
+	require_once "../scripts/functions.inc";
 ?>
 <!DOCTYPE html>
 <head>
@@ -35,7 +35,7 @@
 				$sector_id = $_POST['sector_id']; 
        
 				$q = mysql_query(
-					"INSERT INTO `employee`
+					"INSERT INTO `employees`
 					(`surname`, `name`, `patronymic`, `en_surname`, `en_name`, `coefficient`, `sector_id`)
 					VALUES ($surname_ru, $name_ru, $patronymic_ru, $surname_en, $name_en, $k, $sector_id);"
 					);

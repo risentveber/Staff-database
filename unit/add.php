@@ -1,5 +1,6 @@
 <?php
-	require_once "../scripts/connection.inc"; 
+	require_once "../scripts/connection.inc";
+	require_once "../scripts/functions.inc" 
 ?>
 <!DOCTYPE html>
 <head>
