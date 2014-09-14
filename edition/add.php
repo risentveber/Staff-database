@@ -1,3 +1,7 @@
+<?php 
+	require_once "../scripts/connection.inc";
+	require_once "../scripts/functions.inc";  
+?>
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -13,7 +17,7 @@
 		</header>
 		<nav class="navbar navbar-inverse">
 			<ul class="nav navbar-nav">
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
@@ -21,22 +25,22 @@
 		<div class="container">
 		<br>
 			<?php 
-				include ("../connection.php");  
-				if (isset($_REQUEST['add'])){ 
-					$type = pre_string($_REQUEST['type']);
-					$full_name = pre_string($_REQUEST['full_name']);
-					$short_name = pre_string($_REQUEST['short_name']); 
-					$k = $_REQUEST['k'];
+				if (isset($_POST['add'])){ 
+					$type = pre_string($_POST['type']);
+					$full_name = pre_string($_POST['full_name']);
+					$short_name = pre_string($_POST['short_name']); 
+					$k = $_POST['k'];
+        
+					$q = mysql_query(
+						"INSERT INTO `editions`
+						(`type`, `edition_name`, `short_edition_name`, `impact_factor`)
+						VALUES ($type, $full_name, $short_name, $k);"
+						);
 
-					$sql_add = "INSERT INTO `Издания`
-								(`Тип издания`, `Полное название журнала`, `Сокращенное название журнала`, `Коэффициент цитируемости`)
-								VALUES ($type, $full_name, $short_name, $k);";         
-					$q = mysql_query($sql_add);
 					if ($q)
-						echo '<div class="alert alert-success col-md-8""><p>Спасибо, издание сохранено в базе данных</p>';
+						print_success_message("Издание $full_name успешно зарегестрировано в базе данных");
 					else
-						echo '<div class="alert alert-danger col-md-8""><p>Произошла ошибка '.mysql_errno()." ".mysql_error().'</p>';
-					echo "</div>";  
+						print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error());
 				}
 			?>
 		</div>

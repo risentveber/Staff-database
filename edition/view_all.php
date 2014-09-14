@@ -1,3 +1,6 @@
+<?php
+	require_once "../scripts/connection.inc";
+?>
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -13,7 +16,7 @@
 		</header>
 		<nav class="navbar navbar-inverse" role="navigation">
 			<ul class="nav navbar-nav" >
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
@@ -22,12 +25,13 @@
 				<H4>Издания</H4>
 				<div class="col-md-8">
 					<?php
-						include("../connection.php");
-						$str = "\n".'<table border="1">'."\n";
+						$str = "\n<table border='1'>\n";
 						$str = $str."<tr><th>Полное название журнала</th></tr>\n";
-
-						$q = mysql_query("SELECT `Полное название журнала` FROM `Издания`
-											ORDER BY `Полное название журнала`;");
+					
+						$q = mysql_query(
+							"SELECT `edition_name` FROM `editions`
+							ORDER BY `edition_name`;"
+							);
 						$rows = mysql_num_rows($q);
 
 						for ($c = 0; $c < $rows; $c++)
