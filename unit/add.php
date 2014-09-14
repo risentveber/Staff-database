@@ -1,5 +1,5 @@
 <?php
-	require_once "../connection.php"; 
+	require_once "../scripts/connection.inc"; 
 ?>
 <!DOCTYPE html>
 <head>
@@ -24,17 +24,19 @@
 		<div class="container">
 		<br>
 			<?php 
-				if (isset($_REQUEST['add'])){ 
-					$name = pre_string($_REQUEST['name']);       
-					$sql_add = "INSERT INTO `Подразделения`
-									(`Название подразделения`)
-								VALUES ($name);";     
-					$q = mysql_query($sql_add);
+				if (isset($_POST['add'])){ 
+					$name = pre_string($_POST['name']);       
+					   
+					$q = mysql_query(
+						"INSERT INTO `units`
+						(`unit_name`)
+						VALUES ($name);"
+						);
+
 					if ($q)
-						print('<div class="alert alert-success col-md-8""><p>Спасибо, вы зарегистрированы в базе данных</p>');  
+						print_success_message("Спасибо, $name зарегистрировано в базе данных");  
 					else
-						echo '<div class="alert alert-danger col-md-8""><p>Произошла ошибка '.mysql_errno()." ".mysql_error().'</p>';
-					echo "</div>"; 
+						print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error());
 				}
 			?>
 		</div>

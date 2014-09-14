@@ -1,3 +1,6 @@
+<?php
+	require_once "../scripts/connection.inc";
+?>
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -18,28 +21,30 @@
 	        </ul>
 		</nav>
 		<section>
-		<div class="container">
-		<H4>Подразделения</H4>
-		<div class="col-md-6">
-		<?php
-				include("../connection.php");
-				$str ="\n".'<table border="1">'."\n";
-				$str=$str."<tr><th>Название подразделения</th></tr>\n";
+			<div class="container">
+				<H4>Подразделения</H4>
+				<div class="col-md-6">
+					<?php
+						$str = "\n<table border='1'>\n";
+						$str = $str."<tr><th>Название подразделения</th></tr>\n";
 
-				$q = mysql_query("SELECT `Название подразделения`, `id` FROM `Подразделения`
-									ORDER BY `Название подразделения`;");
-				$rows = mysql_num_rows($q);
+						$q = mysql_query(
+							"SELECT `unit_name`, `id`
+							FROM `units`
+							ORDER BY `unit_name`;"
+							);
 
-				for ($c = 0; $c < $rows; $c++)
-					$str=$str.'<tr><td><a href="/unit/view.php?unit_id='.mysql_result($q, $c, 1).'">'.mysql_result($q, $c, 0)."<a></td></tr>\n";
-				$str=$str."</table>\n\n";
-			
-				echo $str;
-		?>
-		<br>
+						$rows = mysql_num_rows($q);
+
+						for ($c = 0; $c < $rows; $c++)
+							$str = $str.'<tr><td><a href="/unit/view.php?unit_id='.mysql_result($q, $c, 1).'">'.mysql_result($q, $c, 0)."<a></td></tr>\n";
+						$str = $str."</table>\n\n";
+					
+						echo $str;
+					?>
+					<br>
+				</div>
 			</div>
-			
-		</div>
 		</section>
 		<footer class="panel-footer">
 			<a href="mailto:risentveber@gmail.com"> Risent </a> &copy 

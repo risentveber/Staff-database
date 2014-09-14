@@ -1,5 +1,5 @@
 <?php
-	require_once "../connection.php";
+	require_once "../scripts/connection.inc";
 ?>
 <!DOCTYPE html>
 <head>
@@ -29,23 +29,28 @@
 			if (isset($_REQUEST['unit_id'])){
 				$unit_id = $_REQUEST['unit_id'];
 
-				$q = mysql_query("SELECT `Название подразделения` FROM `Подразделения`
-						WHERE `id` = $unit_id;");
+				$q = mysql_query(
+					"SELECT `unit_name`
+					FROM `units`
+					WHERE `id` = $unit_id;"
+					);
 
 				$title = mysql_result($q, 0, 0);
 			
-				echo '<h2>'.$title."</h2>\n";
+				echo "<h2>$title</h2>\n";
 
-				$q = mysql_query("SELECT `Название сектора`, `id` 
-									FROM  `Сектора`
-									WHERE `Подразделения_id`= $unit_id;");
+				$q = mysql_query(
+					"SELECT `sector_name`, `id` 
+					FROM  `sectors`
+					WHERE `unit_id`= $unit_id;"
+					);
 
 				$rows = mysql_num_rows($q);
 				if ($rows == 0){
 					echo "В подразделении нет секторов";
 				} else {
 					$str = "<table>\n";
-					$str=$str."<tr><th>Название</th></tr>\n";
+					$str = $str."<tr><th>Название</th></tr>\n";
 
 					for ($c = 0; $c < $rows; $c++) {
 						$str=$str.'<tr><td><a href="/sector/view.php?sector_id='.mysql_result($q, $c, 1).'">'.mysql_result($q, $c, 0)."</a></td></tr>\n";
