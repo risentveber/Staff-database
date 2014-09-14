@@ -1,10 +1,10 @@
 <?php 
-	require_once "../connection.php";
+	require_once "../scripts/connection.inc";
 ?>
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
-	<title>Просмотр сотрудников</title>
+	<title>Сотрудники</title>
 	
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -25,20 +25,23 @@
 			<H4>Сотрудники</H4>
 			<div class="col-md-8">
 				<?php
-					$str ="\n".'<table border="1">'."\n";
+					$str ="\n<table border='1'>\n";
 
-					$q = mysql_query("SELECT `Фамилия`, `Имя`, `Название сектора`, `Сотрудники`.`id`, `Сектора`.`id`, `Название подразделения`,`Подразделения`.`id`
-										FROM `Сотрудники`
-										LEFT JOIN `Сектора`
-										ON `Сотрудники`.`Сектор_id`= `Сектора`.`id`
-										LEFT JOIN `Подразделения`
-										ON `Подразделения_id` = `Подразделения`.`id`
-										ORDER BY `Фамилия`,`Имя`;");
+					$q = mysql_query(
+						"SELECT `surname`, `name`, `sector_name`, `employees`.`id`, `secotrs`.`id`, `sector_name`, `units`.`id`
+						FROM `employees`
+						LEFT JOIN `sectors`
+						ON `emoployees`.`sector_id`= `sectors`.`id`
+						LEFT JOIN `units`
+						ON `unit_id` = `units`.`id`
+						ORDER BY `surname`,`name`;"
+						);
+
 					$rows = mysql_num_rows($q);
 					if ($rows == 0)
-						echo "error_log(message)";
+						echo "error";
 
-					$str=$str."<tr><th>Фамилия Имя</th><th>Подразделения</th><th>Сектора</th></tr>\n";
+					$str=$str."<tr><th>Фамилия Имя</th><th>Отделы</th><th>Сектора</th></tr>\n";
 					for ($c = 0; $c < $rows; $c++){
 						$str=$str.'<tr><td><a href="/employee/view.php?employee_id='.mysql_result($q, $c, 3).'">';
 						$str=$str.mysql_result($q, $c, 0)." ".mysql_result($q, $c, 1)."</a></td><td>";

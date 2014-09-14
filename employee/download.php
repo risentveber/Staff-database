@@ -1,12 +1,12 @@
 <?php
-require_once "../connection.php";
+require_once "../scripts/connection.inc";
 
 if (isset($_POST['view'])){
 	$employee_id = $_POST['id'];
 
 	$q = mysql_query(
-		"SELECT `Фамилия`, `Имя`, `Отчество`, `Сектор_id`, `Коэффициент`
-		FROM `Сотрудники`
+		"SELECT `surname`, `name`, `patronymic`, `sector_id`, `coefficient`
+		FROM `employees`
 		WHERE `id` = $employee_id;");
 
 	$name = mysql_result($q, 0, 1);
@@ -21,11 +21,14 @@ if (isset($_POST['view'])){
 	header("Content-type: text/plain");
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
 
-	$q = mysql_query("SELECT `Название сектора`,`Название подразделения` 
-					FROM `Сектора`
-					LEFT JOIN `Подразделения`
-					ON `Подразделения_id` = `Подразделения`.`id`
-					WHERE `Сектора`.`id` = $sector_id;");
+	$q = mysql_query(
+		"SELECT `sector_name`,`unit_name` 
+		FROM `sectors`
+		LEFT JOIN `units`
+		ON `unit_id` = `units`.`id`
+		WHERE `sectors`.`id` = $sector_id;"
+		);
+
 	$sector_name = mysql_result($q, 0, 0);
 	$unit_name = mysql_result($q, 0, 1);
 	
@@ -39,35 +42,38 @@ if (isset($_POST['view'])){
 	$str = $str."#####################################\n\n";
 	echo $str;
 	
-	$q = mysql_query(	"SELECT `Название публикации`, `Год публикации` ,`Полное название журнала`, `Коэффициент цитируемости`, `Число авторов`
-						FROM `Авторы-Публикации`
-						LEFT JOIN `Публикации`
-						ON `Публикации_id` = `Публикации`.`id` 
-						LEFT JOIN `Издания`
-						ON `Издания_id` = `Издания`.`id`
-						WHERE `Сотрудники_id` = $employee_id;"
-						);
-	/*if ($q)
-		echo "УСПЕХ";
-	else
-		echo "ПИЧАЛЬ";*/
+	$q = mysql_query(
+		"SELECT `publication_name`, `year` ,`edition_name`, `impact_factor`, `number_of_authors`
+		FROM `authors-publications`
+		LEFT JOIN `publications`
+		ON `publication_id` = `publications`.`id` 
+		LEFT JOIN `editons`
+		ON `editon_id` = `editions`.`id`
+		WHERE `employee_id` = $employee_id;"
+		);
 
 	$unit = mysql_result($q, 0, 0);
 
 	$rows = mysql_num_rows($q);
 	if ($rows == 0)
-		echo "НЕТ ПУБЛИКАЦИЙ\n";
+		echo "В публикационной деятельности замечен не был\n";
 	else{
 		$str = "Публикации\n";
+		$sum = 0;
+		$sum_str = "0";
 		for ($c = 0; $c < $rows; $c++){
 				$str=$str."\nНазвание: ".mysql_result($q, $c, 0);
 				$str=$str."\n     Год: ".mysql_result($q, $c, 1);
 				$str=$str."\n Издание: ".mysql_result($q, $c, 2);
+				$prnd_str = mysql_result($q, $c, 3)."*".$k."/".mysql_result($q, $c, 4);
 				$prnd = (0+mysql_result($q, $c, 3))*(0+$k)/(0+mysql_result($q, $c, 4));
-				$str=$str."\n    ПРНД: ".mysql_result($q, $c, 3)."*".$k."/".mysql_result($q, $c, 4)." = $prnd\n";
+				$str=$str."\n    ПРНД: $prnd_str = $prnd\n";
+				$sum += $prnd;
+				$sum_str += $prnd_str;
 				
 		}
 		echo $str;
+		echo "\nИтого ПРНД: $sum_str = $sum";
 
 	}
 }

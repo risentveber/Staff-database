@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php 
-	include("../patterns.php"); 
-	include("../connection.php");
+	include("../scripts/patterns.inc"); 
+	include("../scripts/connection.inc");
 ?>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -17,7 +17,7 @@
 		</header>
 		<nav class="navbar navbar-inverse" role="navigation">
 			<ul class="nav navbar-nav" >
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
@@ -53,16 +53,19 @@
 				</div>
 			 	<div class="input-group">			
 				<?php
-					$unit_id = $_REQUEST['unit_id'];
+					$unit_id = $_POST['unit_id'];
 		
 					$str ="\n<option></option>\n";
 
-					$q = mysql_query("SELECT `Сектора`.`id`, `Название сектора` 
-										FROM `Сектора`
-										LEFT JOIN `Подразделения`
-										ON `Подразделения_id` = `Подразделения`.`id`
-										WHERE `Подразделения`.`id` = $unit_id
-										ORDER BY `Название сектора`;");
+					$q = mysql_query(
+						"SELECT `sectors`.`id`, `sector_name` 
+						FROM `sectors`
+						LEFT JOIN `units`
+						ON `unit_id` = `units`.`id`
+						WHERE `units`.`id` = $unit_id
+						ORDER BY `sector_name`;"
+						);
+
 					$rows = mysql_num_rows($q);
 					$fields = mysql_num_fields($q);
 					for ($c = 0; $c < $rows; $c++) {
@@ -70,7 +73,7 @@
 					}
 					$str=$str.'</select>'."\n\n";
 					
-					echo '  <div class="input-group-addon">Сектор</div>';
+					echo '<div class="input-group-addon">Сектор</div>';
 					echo '<select required name="sector_id" class="form-control">';
 					echo $str;
 				?>
@@ -84,7 +87,7 @@
 		</div>
 		</section>
 		<footer class="panel-footer">
-			RISENT &copy 
+			<a href="mailto:risentveber@gmail.com"> Risent </a> &copy 
 		</footer>
 	</div>
 </body>

@@ -1,3 +1,6 @@
+<?php
+	require_once "../scripts/connection.inc";
+?>
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -13,7 +16,7 @@
 		</header>
 		<nav class="navbar navbar-inverse">
 			<ul class="nav navbar-nav">
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
@@ -22,22 +25,29 @@
 		<div class="col-md-8">
 			<br>
 			<?php
-				include("../connection.php");
 				if (isset($_REQUEST['employee_id'])){
 					$employee_id = $_REQUEST['employee_id'];
 
-					$q = mysql_query("SELECT `Фамилия`, `Имя`, `Отчество`, `Сектор_id`, `id` FROM `Сотрудники`
-							WHERE `id` = $employee_id;");
+					$q = mysql_query(
+						"SELECT `surname`, `name`, `patronymic`, `sector_id`, `id` 
+						FROM `employees`
+						WHERE `id` = $employee_id;"
+						);
+
 					$name = mysql_result($q, 0, 1);
 					$surname = mysql_result($q, 0, 0);
 					$patronymic = mysql_result($q, 0, 2);
 					$sector_id = mysql_result($q, 0, 3);
 					$id = mysql_result($q, 0, 4);
 
-					$q = mysql_query("SELECT `Название сектора`, `Название подразделения` FROM `Сектора`
-							LEFT JOIN `Подразделения`
-							ON `Подразделения_id` =  `Подразделения`.`id`
-							WHERE `Сектора`.`id` = $sector_id;");
+					$q = mysql_query(
+						"SELECT `sector_name`, `unit_name` 
+						FROM `sectors`
+						LEFT JOIN `units`
+						ON `unit_id` =  `units`.`id`
+						WHERE `sectors`.`id` = $sector_id;"
+						);
+
 					$unit = mysql_result($q, 0, 1);
 					$sector = mysql_result($q, 0, 0);
 					
@@ -50,11 +60,13 @@
 					$str = $str."</table>\n";
 					echo $str;
 					
-					$q = mysql_query("SELECT `Название публикации`, `Год публикации`, `Публикации_id`
-										FROM `Авторы-Публикации`
-										LEFT JOIN `Публикации`
-										ON `Публикации_id` = id
-										WHERE `Сотрудники_id` = $employee_id;");
+					$q = mysql_query(
+						"SELECT `publication_name`, `year`, `publication_id`
+						FROM `authors-publications`
+						LEFT JOIN `publications`
+						ON `publication_id` = `id`
+						WHERE `employee_id` = $employee_id;"
+						);
 
 					$unit = mysql_result($q, 0, 0);
 

@@ -1,3 +1,7 @@
+<?php
+	require_once "../scritps/connection.inc";
+	require_once "../scritps/functions.inc";
+?>
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -13,32 +17,33 @@
 		</header>
 		<nav class="navbar navbar-inverse">
 			<ul class="nav navbar-nav">
-        		<li ><a class="not_active" href="/index.php">Управление</a></li>
+        		<li><a class="not_active" href="/index.php">Управление</a></li>
         		<li><a class="not_active" href="/help.php">Справка</a></li>
 	        </ul>
 		</nav>
 		<section>
 		<div class="container">
 		<br>
-		<?php 
-			include ("../connection.php");    
-			if (isset($_REQUEST['add'])){         
-				$name_ru = pre_string($_REQUEST['name_ru']);
-				$surname_ru = pre_string($_REQUEST['surname_ru']);         
-				$patronymic_ru = pre_string($_REQUEST['patronymic_ru']);         
-				$name_en = pre_string($_REQUEST['name_en']);         
-				$surname_en = pre_string($_REQUEST['surname_en']);
-				$k = $_REQUEST['k'];   
-				$sector_id = $_REQUEST['sector_id'];        
-				$sql_add = "INSERT INTO `Сотрудники`
-							(`Фамилия`, `Имя`, `Отчество`, `Фамилия на английском`, `Имя на английском`, `Коэффициент`, `Сектор_id`)
-							VALUES ($surname_ru, $name_ru, $patronymic_ru, $surname_en, $name_en, $k, $sector_id);";         
-				$result = mysql_query($sql_add);
-				if ($result)
-					echo '<div class="alert alert-success col-md-8""><p>Спасибо, вы зарегистрированы в базе данных</p>';  
+		<?php     
+			if (isset($_POST['add'])){         
+				$name_ru = pre_string($_POST['name_ru']);
+				$surname_ru = pre_string($_POST['surname_ru']);         
+				$patronymic_ru = pre_string($_POST['patronymic_ru']);         
+				$name_en = pre_string($_POST['name_en']);         
+				$surname_en = pre_string($_POST['surname_en']);
+				$k = $_POST['k'];   
+				$sector_id = $_POST['sector_id']; 
+       
+				$q = mysql_query(
+					"INSERT INTO `employee`
+					(`surname`, `name`, `patronymic`, `en_surname`, `en_name`, `coefficient`, `sector_id`)
+					VALUES ($surname_ru, $name_ru, $patronymic_ru, $surname_en, $name_en, $k, $sector_id);"
+					);
+				
+				if ($q)
+					print_success_message("Спасибо, $surname_ru $name_ru зарегистрирован(а) в базе данных");  
 				else
-					echo '<div class="alert alert-danger col-md-8""><p>Произошла ошибка '.mysql_errno()." ".mysql_error().'</p>';
-				echo "</div>";  
+					print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error());  
 			}
 		?>
 		

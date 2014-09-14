@@ -1,5 +1,5 @@
 <?php 
-	require_once "../scripts/patterns.php"; 
+	require_once "../scripts/patterns.inc"; 
 ?>
 
 <!DOCTYPE html>
