@@ -1,92 +1,290 @@
-
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+CREATE SCHEMA IF NOT EXISTS `staff_database` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
 USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Подразделения`
+-- Table `staff_database`.`units`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Подразделения` 
+CREATE TABLE IF NOT EXISTS `staff_database`.`units` 
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`Название подразделения` VARCHAR(45) NOT NULL,
+	`unit_name` VARCHAR(45) NOT NULL,
 
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	CONSTRAINT `uc_unit_name` UNIQUE (`unit_name`)
 );
 
 -- -----------------------------------------------------
--- Table `mydb`.`Сектора`
+-- Table `staff_database`.`sectors`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Сектора` 
+CREATE TABLE IF NOT EXISTS `staff_database`.`sectors` 
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`Название сектора` VARCHAR(45) NULL,
-	`Подразделения_id` INT NOT NULL,
+	`sector_name` VARCHAR(45) NULL,
+	`unit_id` INT NOT NULL,
 	
 	PRIMARY KEY (`id`),
-	CONSTRAINT `fk_Сектора_Подразделения` FOREIGN KEY (`Подразделения_id`) REFERENCES `mydb`.`Подразделения` (`id`)
+	CONSTRAINT `uc_sector_name_unit_id` UNIQUE (`sector_name`,`unit_id`),
+	CONSTRAINT `fk_sector_unit` FOREIGN KEY (`unit_id`) REFERENCES `staff_database`.`units` (`id`)
 );
 
 -- -----------------------------------------------------
--- Table `mydb`.`Сотрудники`
+-- Table `staff_database`.`employees`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Сотрудники` 
+CREATE TABLE IF NOT EXISTS `staff_database`.`employees` 
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`Фамилия` VARCHAR(45) NOT NULL,
-	`Имя` VARCHAR(45) NOT NULL,
-	`Отчество` VARCHAR(45) NULL,
-	`Фамилия на английском` VARCHAR(45) NULL,
-	`Имя на английском` VARCHAR(45) NULL,
-	`Коэффициент` DOUBLE NULL DEFAULT 1.0,
-	`Сектор_id` INT NOT NULL,
+	`surname` VARCHAR(45) NOT NULL,
+	`name` VARCHAR(45) NOT NULL,
+	`patronymic` VARCHAR(45) NULL,
+	`en_surname` VARCHAR(45) NULL,
+	`en_name` VARCHAR(45) NULL,
+	`coefficient` DOUBLE NOT NULL DEFAULT 1.0,
+	`sector_id` INT NOT NULL,
 
 	PRIMARY KEY (`id`),
-	CONSTRAINT `fk_Сотрудники_сектора` FOREIGN KEY (`Сектор_id`) REFERENCES `mydb`.`Сектора` (`id`)
+	CONSTRAINT `uc_surname_name` UNIQUE (`surname`,`name`),
+	CONSTRAINT `fk_employee_sector` FOREIGN KEY (`sector_id`) REFERENCES `staff_database`.`sectors` (`id`)
 );
 
 -- -----------------------------------------------------
--- Table `mydb`.`Издания`
+-- Table `staff_database`.`editions`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Издания` 
+CREATE TABLE IF NOT EXISTS `staff_database`.`editions` 
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`Тип издания` VARCHAR(45) NULL,
-	`Полное название журнала` VARCHAR(45) NOT NULL,
-	`Сокращенное название журнала` VARCHAR(45) NULL,
-	`Коэффициент цитируемости` DOUBLE NULL,
+	`type` VARCHAR(45) NULL,
+	`edition_name` VARCHAR(45) NOT NULL,
+	`short_edition_name` VARCHAR(45) NULL,
+	`impact_factor` DOUBLE NOT NULL,
 
-	PRIMARY KEY (`id`)
-);
-
--- -----------------------------------------------------
--- Table `mydb`.`Публикации`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Публикации` 
-(
-	`id` INT NOT NULL AUTO_INCREMENT,
-	`Издания_id` INT NOT NULL,
-	`Название публикации` VARCHAR(45) NOT NULL,
-	`Год публикации` INT NOT NULL,
-	`Число авторов` INT NOT NULL,
-	`Полная библиографическая ссылка` VARCHAR(200) NULL,
-
-	CONSTRAINT uc_Year_name UNIQUE (`Название публикации`, `Год публикации`),
 	PRIMARY KEY (`id`),
-	CONSTRAINT `fk_Публикации_Издания` FOREIGN KEY (`Издания_id`) REFERENCES `mydb`.`Издания` (`id`)
+	CONSTRAINT `uc_edition_name` UNIQUE (`edition_name`)
 );
 
 -- -----------------------------------------------------
--- Table `mydb`.`Авторы-Публикации`
+-- Table `staff_database`.`publications`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Авторы-Публикации` 
+CREATE TABLE IF NOT EXISTS `staff_database`.`publications` 
 (
-	`Сотрудники_id` INT NOT NULL,
-	`Публикации_id` INT NOT NULL,
-	PRIMARY KEY (`Публикации_id`, `Сотрудники_id`),
-	INDEX `idx_Авторы-Публикации_Сотрудники` (`Сотрудники_id` ASC),
-	INDEX `idx_Авторы-Публикации_Публикации` (`Публикации_id` ASC),
-	CONSTRAINT `fk_Авторы-Публикации_Сотрудники` FOREIGN KEY (`Сотрудники_id`) REFERENCES `mydb`.`Сотрудники` (`id`),
-	CONSTRAINT `fk_Авторы-Публикации_Публикации` FOREIGN KEY (`Публикации_id`) REFERENCES `mydb`.`Публикации` (`id`)
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`edition_id` INT NOT NULL,
+	`publication_name` VARCHAR(45) NOT NULL,
+	`year` INT NOT NULL,
+	`number_of_authors` INT NOT NULL,
+	`full_bibliographic_reference` VARCHAR(200) NULL,
+
+	CONSTRAINT `uc_publication_name_year` UNIQUE (`publication_name`, `year`),
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_publication_edition` FOREIGN KEY (`edition_id`) REFERENCES `staff_database`.`editions` (`id`)
 );
 
+-- -----------------------------------------------------
+-- Table `staff_database`.`authors-publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`authors-publications` 
+(
+	`employee_id` INT NOT NULL,
+	`publication_id` INT NOT NULL,
+
+	PRIMARY KEY (`publication_id`, `employee_id`),
+	INDEX `idx_employee_id` (`employee_id` ASC),
+	INDEX `idx_publication_id` (`publication_id` ASC),
+	CONSTRAINT `fk_authors-publications_employees` FOREIGN KEY (`employee_id`) REFERENCES `staff_database`.`employees` (`id`),
+	CONSTRAINT `fk_authors-publications_publication` FOREIGN KEY (`publication_id`) REFERENCES `staff_database`.`publications` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`authors-publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`activities`
+(
+	`id` INT NOT NULL AUTO_INCRIMENT,
+	`activity_name` VARCHAR(45) NOT NULL,
+	`activity_coefficient` DOUBLE NOT NULL DEFAULT 1.0,
+	`description` VARCHAR(200) NULL,
+
+	CONSTRAINT `fk_employee_sector` FOREIGN KEY (`sector_id`) REFERENCES `staff_database`.`sectors` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`editions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`editions` 
+(
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`type` VARCHAR(45) NULL,
+	`edition_name` VARCHAR(45) NOT NULL,
+	`short_edition_name` VARCHAR(45) NULL,
+	`impact_factor` DOUBLE NOT NULL,
+
+	PRIMARY KEY (`id`),
+	CONSTRAINT `uc_edition_name` UNIQUE (`edition_name`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`publications` 
+(
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`edition_id` INT NOT NULL,
+	`publication_name` VARCHAR(45) NOT NULL,
+	`year` INT NOT NULL,
+	`number_of_authors` INT NOT NULL,
+	`full_bibliographic_reference` VARCHAR(200) NULL,
+
+	CONSTRAINT `uc_publication_name_year` UNIQUE (`publication_name`, `year`),
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_publication_edition` FOREIGN KEY (`edition_id`) REFERENCES `staff_database`.`editions` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`authors-publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`authors-publications` 
+(
+	`employee_id` INT NOT NULL,
+	`publication_id` INT NOT NULL,
+
+	PRIMARY KEY (`publication_id`, `employee_id`),
+	INDEX `idx_employee_id` (`employee_id` ASC),
+	INDEX `idx_publication_id` (`publication_id` ASC),
+	CONSTRAINT `fk_authors-publications_employees` FOREIGN KEY (`employee_id`) REFERENCES `staff_database`.`employees` (`id`),
+	CONSTRAINT `fk_authors-publications_publication` FOREIGN KEY (`publication_id`) REFERENCES `staff_database`.`publications` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`authors-publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`activities`
+(
+	`id` INT NOT NULL AUTO_INCRIMENT,
+	`activity_name` VARCHAR(45) NOT NULL,
+	`activity_coefficient` DOUBLE NOT NULL DEFAULT 1.0,
+	`description` VARCHAR(200) NULL,
+
+	CONSTRAINT `fk_employee_sector` FOREIGN KEY (`sector_id`) REFERENCES `staff_database`.`sectors` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`editions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`editions` 
+(
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`type` VARCHAR(45) NULL,
+	`edition_name` VARCHAR(45) NOT NULL,
+	`short_edition_name` VARCHAR(45) NULL,
+	`impact_factor` DOUBLE NOT NULL,
+
+	PRIMARY KEY (`id`),
+	CONSTRAINT `uc_edition_name` UNIQUE (`edition_name`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`publications` 
+(
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`edition_id` INT NOT NULL,
+	`publication_name` VARCHAR(45) NOT NULL,
+	`year` INT NOT NULL,
+	`number_of_authors` INT NOT NULL,
+	`full_bibliographic_reference` VARCHAR(200) NULL,
+
+	CONSTRAINT `uc_publication_name_year` UNIQUE (`publication_name`, `year`),
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_publication_edition` FOREIGN KEY (`edition_id`) REFERENCES `staff_database`.`editions` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`authors-publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`authors-publications` 
+(
+	`employee_id` INT NOT NULL,
+	`publication_id` INT NOT NULL,
+
+	PRIMARY KEY (`publication_id`, `employee_id`),
+	INDEX `idx_employee_id` (`employee_id` ASC),
+	INDEX `idx_publication_id` (`publication_id` ASC),
+	CONSTRAINT `fk_authors-publications_employees` FOREIGN KEY (`employee_id`) REFERENCES `staff_database`.`employees` (`id`),
+	CONSTRAINT `fk_authors-publications_publication` FOREIGN KEY (`publication_id`) REFERENCES `staff_database`.`publications` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`authors-publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`activities`
+(
+	`id` INT NOT NULL AUTO_INCRIMENT,
+	`activity_name` VARCHAR(45) NOT NULL,
+	`activity_coefficient` DOUBLE NOT NULL DEFAULT 1.0,
+	`description` VARCHAR(200) NULL,
+
+	CONSTRAINT `fk_employee_sector` FOREIGN KEY (`sector_id`) REFERENCES `staff_database`.`sectors` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`editions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`editions` 
+(
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`type` VARCHAR(45) NULL,
+	`edition_name` VARCHAR(45) NOT NULL,
+	`short_edition_name` VARCHAR(45) NULL,
+	`impact_factor` DOUBLE NOT NULL,
+
+	PRIMARY KEY (`id`),
+	CONSTRAINT `uc_edition_name` UNIQUE (`edition_name`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`publications` 
+(
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`edition_id` INT NOT NULL,
+	`publication_name` VARCHAR(45) NOT NULL,
+	`year` INT NOT NULL,
+	`number_of_authors` INT NOT NULL,
+	`full_bibliographic_reference` VARCHAR(200) NULL,
+
+	CONSTRAINT `uc_publication_name_year` UNIQUE (`publication_name`, `year`),
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_publication_edition` FOREIGN KEY (`edition_id`) REFERENCES `staff_database`.`editions` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`authors-publications`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`authors-publications` 
+(
+	`employee_id` INT NOT NULL,
+	`publication_id` INT NOT NULL,
+
+	PRIMARY KEY (`publication_id`, `employee_id`),
+	INDEX `idx_employee_id` (`employee_id` ASC),
+	INDEX `idx_publication_id` (`publication_id` ASC),
+	CONSTRAINT `fk_authors-publications_employees` FOREIGN KEY (`employee_id`) REFERENCES `staff_database`.`employees` (`id`),
+	CONSTRAINT `fk_authors-publications_publication` FOREIGN KEY (`publication_id`) REFERENCES `staff_database`.`publications` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `staff_database`.`activities`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`activities`
+(
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`employee_id` INT NOT NULL,
+	`activity_name` VARCHAR(45) NOT NULL,
+	`activity_coefficient` DOUBLE NOT NULL DEFAULT 1.0,
+	`description` VARCHAR(200) NULL,
+
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_activity_employee` FOREIGN KEY (`employee_id`) REFERENCES `staff_database`.`employees` (`id`)
+);
