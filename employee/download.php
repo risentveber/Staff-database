@@ -32,15 +32,15 @@ if (isset($_POST['view'])){
 	$sector_name = mysql_result($q, 0, 0);
 	$unit_name = mysql_result($q, 0, 1);
 	
-	$str = $str."##########################################################################\n";
-	$str = $str."Личная информация\n";
-	$str = $str."##########################################################################\n";
-	$str = $str."          Имя: ".$name."\n";
-	$str = $str."      Фамилия: ".$surname."\n";
-	$str = $str."     Отчество: ".$patronymic."\n";
-	$str = $str."Подразделение: ".$unit_name."\n";
-	$str = $str."       Сектор: ".$sector_name."\n";
-	$str = $str."\n";
+	$str = $str."##########################################################################\r\n";
+	$str = $str."Личная информация\r\n";
+	$str = $str."##########################################################################\r\n";
+	$str = $str."          Имя: ".$name."\r\n";
+	$str = $str."      Фамилия: ".$surname."\r\n";
+	$str = $str."     Отчество: ".$patronymic."\r\n";
+	$str = $str."Подразделение: ".$unit_name."\r\n";
+	$str = $str."       Сектор: ".$sector_name."\r\n";
+	$str = $str."\r\n";
 	echo $str;
 	
 	$q = mysql_query(
@@ -59,33 +59,33 @@ if (isset($_POST['view'])){
 	$first = true;
 
 	if ($rows == 0)
-		echo "В публикационной деятельности замечен не был\n";
+		echo "В публикационной деятельности замечен не был\r\n";
 	else{
-		$str = "##########################################################################\n";
-		$str = $str."Публикации\n";
-		$str = $str."##########################################################################\n";
+		$str = "##########################################################################\r\n";
+		$str = $str."Публикации\r\n";
+		$str = $str."##########################################################################\r\n";
 		$sum = 0;
 		$sum_str = "";
 
 		for ($c = 0; $c < $rows; $c++){
-				$str=$str."\nНазвание: ".mysql_result($q, $c, 0);
-				$str=$str."\n     Год: ".mysql_result($q, $c, 1);
-				$str=$str."\n Издание: ".mysql_result($q, $c, 2);
+				$str=$str."\r\nНазвание: ".mysql_result($q, $c, 0);
+				$str=$str."\r\n     Год: ".mysql_result($q, $c, 1);
+				$str=$str."\r\n Издание: ".mysql_result($q, $c, 2);
 				$prnd_str = mysql_result($q, $c, 3)."*".$k."/".mysql_result($q, $c, 4);
 				$prnd = (0+mysql_result($q, $c, 3))*(0+$k)/(0+mysql_result($q, $c, 4));
 				$prnd = round($prnd, 3);
-				$str=$str."\n    ПРНД: $prnd_str = $prnd\n";
+				$str=$str."\r\n    ПРНД: $prnd_str = $prnd\r\n";
 				$sum += $prnd;
 				if ($first)
 					$first = false;
 				else
 					$sum_str = $sum_str." + ";
-				$str = $str."--------------------------------------------------------------------------\n";
+				$str = $str."--------------------------------------------------------------------------\r\n";
 				$sum_str = $sum_str."$prnd";
 				
 		}
 		echo $str;
-		echo "\nИтого ПРНД: $sum_str = $sum";
+		echo "\r\nИтого ПРНД: $sum_str = $sum";
 
 	}
 }
