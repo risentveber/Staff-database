@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `staff_database`.`authors-publications`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `staff_database`.`activities`
 (
-	`id` INT NOT NULL AUTO_INCRIMENT,
+	`id` INT NOT NULL AUTO_INCREMENT,
 	`activity_name` VARCHAR(45) NOT NULL,
 	`activity_coefficient` DOUBLE NOT NULL DEFAULT 1.0,
 	`description` VARCHAR(200) NULL,
