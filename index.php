@@ -27,8 +27,8 @@
 					<a class="btn btn-default" href="/unit/new.php">Добавить отдел</a>
 					<a class="btn btn-default" href="/publication/new_pre.php">Добавить публикацию</a>
 					<a class="btn btn-default" href="/edition/new.php">Добавить издание</a>
-					<a class="btn btn-default" href="/sector/new.php">Добавить сектор</a>
-					<a class="btn btn-default" href="/sector/new.php">Добавить деятельность</a>
+					<a class="btn btn-default" href="/sector/new.php">Добавить лабораторию</a>
+					<a class="btn btn-default" href="/activity/new.php">Добавить деятельность</a>
 				</div>
 				<div class="btn-group-vertical">
 					<a class="btn btn-default" href="/employee/view_all.php">Все сотрудники</a>

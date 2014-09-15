@@ -73,7 +73,7 @@
 					}
 					$str=$str.'</select>'."\n\n";
 					
-					echo '<div class="input-group-addon">Сектор</div>';
+					echo '<div class="input-group-addon">Лаборатория</div>';
 					echo '<select required name="sector_id" class="form-control">';
 					echo $str;
 				?>

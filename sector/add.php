@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
-	<title>Добавление Сектора</title>
+	<title>Добавление Лаборатории</title>
 
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -37,7 +37,7 @@
 						);
 
 					if ($q)
-						print_success_message("Спасибо, сектор $sector_name зарегестрирован в базе данных");  
+						print_success_message("Спасибо, лаборатория $sector_name зарегестрирован в базе данных");  
 					else
 						print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error());
 				}

@@ -38,8 +38,8 @@ if (isset($_POST['view'])){
 	$str = $str."          Имя: ".$name."\r\n";
 	$str = $str."      Фамилия: ".$surname."\r\n";
 	$str = $str."     Отчество: ".$patronymic."\r\n";
-	$str = $str."Подразделение: ".$unit_name."\r\n";
-	$str = $str."       Сектор: ".$sector_name."\r\n";
+	$str = $str."        Отдел: ".$unit_name."\r\n";
+	$str = $str."  Лаборатория: ".$sector_name."\r\n";
 	$str = $str."\r\n";
 	echo $str;
 	

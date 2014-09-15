@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
-	<title>Добавление сектора</title>
+	<title>Добавление лаборатории</title>
 
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -26,7 +26,7 @@
 		<div class="container">
 			<form class="form-inline" action="add.php" method="post">
 			
-				<H4>Сектор</H4>
+				<H4>Лаборатория</H4>
 				<div class="input-group">
 				
 				<input class="form-control" required name="sector_name" size="45" type="text" placeholder="Название"<?php echo $name_pattern; ?>>
@@ -49,7 +49,7 @@
 					}
 					$str=$str.'</select>'."\n\n";
 					
-					echo '<div class="input-group-addon">Подразделение:</div>';
+					echo '<div class="input-group-addon">Отдел:</div>';
 					echo '<select required name="unit_id" class="form-control">';
 					echo $str;
 				?>

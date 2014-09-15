@@ -41,7 +41,7 @@
 					if ($rows == 0)
 						echo "error";
 
-					$str=$str."<tr><th>Фамилия Имя</th><th>Отделы</th><th>Сектора</th></tr>\n";
+					$str=$str."<tr><th>Фамилия Имя</th><th>Отделы</th><th>Лаборатории</th></tr>\n";
 					for ($c = 0; $c < $rows; $c++){
 						$str=$str.'<tr><td><a href="/employee/view.php?employee_id='.mysql_result($q, $c, 3).'">';
 						$str=$str.mysql_result($q, $c, 0)." ".mysql_result($q, $c, 1)."</a></td><td>";

@@ -55,8 +55,8 @@
 					$str = $str."<tr><th>Имя</th><td>$name</td></tr>\n";
 					$str = $str."<tr><th>Фамилия</th><td>$surname</td></tr>\n";
 					$str = $str."<tr><th>Отчество</th><td>$patronymic</td></tr>\n";
-					$str = $str."<tr><th>Подразделение</th><td>$unit</td></tr>\n";
-					$str = $str.'<tr><th>Сектор</th><td><a href="/sector/view.php?sector_id='.$sector_id.'"'.">$sector</a></td></tr>\n";
+					$str = $str."<tr><th>Отдел</th><td>$unit</td></tr>\n";
+					$str = $str.'<tr><th>Лаборатория</th><td><a href="/sector/view.php?sector_id='.$sector_id.'"'.">$sector</a></td></tr>\n";
 					$str = $str."</table>\n";
 					echo $str;
 					

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
-	<title>Просмотр подразделения</title>
+	<title>Просмотр отдела</title>
 	
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -47,7 +47,7 @@
 
 				$rows = mysql_num_rows($q);
 				if ($rows == 0){
-					echo "В подразделении нет секторов";
+					echo "В отделе нет лабораторий";
 				} else {
 					$str = "<table>\n";
 					$str = $str."<tr><th>Название</th></tr>\n";
