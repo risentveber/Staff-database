@@ -27,9 +27,6 @@
 				<H4>Информация о издании:</H4>  
 
 				<div class="input-group">
-					<input placeholder="Тип издания" class="form-control" name="type" size="45" type="text" <?php echo $name_pattern; ?> ><br>
-				</div><br>
-				<div class="input-group">
 					<input placeholder="Полное название журнала" class="form-control" autofocus required name="full_name" size="45" type="text" <?php echo $name_pattern; ?> ><br>
 				</div><br>
 				<div class="input-group">
@@ -37,8 +34,18 @@
 				</div>
 				<br>
 				<div class="input-group">
-					<div class="input-group-addon">Коэффициент цитируемости:</div>
-					<input class="form-control" required name="k" type="number" min="1" max="100" >
+					<div class="input-group-addon">Тип:</div>
+					<span class="input-group-addon">
+						<input type="radio" required name="foreign" value="true"> Зарубежное
+					</span>
+					<span class="input-group-addon">
+						<input type="radio" required name="foreign" value="false"> Отечественное
+					</span>
+      			</div>
+				<br>
+				<div class="input-group">
+					<div class="input-group-addon">Impact factor:</div>
+					<input class="form-control" required name="k" type="number" min="0" max="100" step="0.001" >
 				</div>
 				<br>
 				<br>		

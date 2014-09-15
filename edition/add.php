@@ -26,15 +26,15 @@
 		<br>
 			<?php 
 				if (isset($_POST['add'])){ 
-					$type = pre_string($_POST['type']);
+					$foreign = ($_POST['foreign'] == 'true') ? 'TRUE' :'FALSE';
 					$full_name = pre_string($_POST['full_name']);
 					$short_name = pre_string($_POST['short_name']); 
 					$k = $_POST['k'];
         
 					$q = mysql_query(
 						"INSERT INTO `editions`
-						(`type`, `edition_name`, `short_edition_name`, `impact_factor`)
-						VALUES ($type, $full_name, $short_name, $k);"
+						(`foreign`, `edition_name`, `short_edition_name`, `impact_factor`)
+						VALUES ($foreign, $full_name, $short_name, $k);"
 						);
 
 					if ($q)

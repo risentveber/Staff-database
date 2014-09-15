@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `staff_database`.`employees`
 CREATE TABLE IF NOT EXISTS `staff_database`.`editions` 
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`type` VARCHAR(45) NULL,
+	`foreign` BOOLEAN NOT NULL,
 	`edition_name` VARCHAR(45) NOT NULL,
 	`short_edition_name` VARCHAR(45) NULL,
 	`impact_factor` DOUBLE NOT NULL,
@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `staff_database`.`publications`
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`edition_id` INT NOT NULL,
+	`preprint` BOOLEAN NOT NULL,
 	`publication_name` VARCHAR(45) NOT NULL,
 	`year` INT NOT NULL,
 	`number_of_authors` INT NOT NULL,

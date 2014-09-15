@@ -3,9 +3,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf8" />
 	<title>Сотрудники ИЯИ РАН</title>
 
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">	
-	<link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>

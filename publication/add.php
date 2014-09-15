@@ -26,7 +26,7 @@
 		<br>
 		<?php 
 			if (isset($_POST['add'])){
-
+				$preprint = ($_POST['preprint'] == 'true') ? 'TRUE' :'FALSE';
 				$title = pre_string($_POST['title']);
 				$year = $_POST['year'];
 				$edition = $_POST['edition'];
@@ -35,8 +35,8 @@
 				
 				$q = mysql_query(
 					"INSERT INTO `publications`
-					(`edition_id`, `publication_name`, `year`, `full_bibliographic_reference`, `number_of_authors`)
-					VALUES ($edition, $title, $year, $info, $count_all);"
+					(`edition_id`, `publication_name`, `year`, `full_bibliographic_reference`, `number_of_authors`, `preprint`)
+					VALUES ($edition, $title, $year, $info, $count_all, $preprint);"
 					); 
 				
 				if ($q){

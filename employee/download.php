@@ -44,7 +44,7 @@ if (isset($_POST['view'])){
 	echo $str;
 	
 	$q = mysql_query(
-		"SELECT `publication_name`, `year` ,`edition_name`, `impact_factor`, `number_of_authors`
+		"SELECT `publication_name`, `year` ,`edition_name`, `impact_factor`, `number_of_authors`,`preprint`,`foreign`
 		FROM `authors-publications`
 		LEFT JOIN `publications`
 		ON `publication_id` = `publications`.`id` 
@@ -68,13 +68,31 @@ if (isset($_POST['view'])){
 		$sum_str = "";
 
 		for ($c = 0; $c < $rows; $c++){
-				$str=$str."\r\nНазвание: ".mysql_result($q, $c, 0);
-				$str=$str."\r\n     Год: ".mysql_result($q, $c, 1);
-				$str=$str."\r\n Издание: ".mysql_result($q, $c, 2);
-				$prnd_str = mysql_result($q, $c, 3)."*".$k."/".mysql_result($q, $c, 4);
-				$prnd = (0+mysql_result($q, $c, 3))*(0+$k)/(0+mysql_result($q, $c, 4));
-				$prnd = round($prnd, 3);
-				$str=$str."\r\n    ПРНД: $prnd_str = $prnd\r\n";
+				$str=$str."\r\n     Название: ".mysql_result($q, $c, 0);
+				$str=$str."\r\n          Год: ".mysql_result($q, $c, 1);
+				$str=$str."\r\n      Издание: ".mysql_result($q, $c, 2);
+				if(mysql_result($q, $c, 6) == '1'){
+					$str=$str."\r\n  Тип издания: зарубежное";
+					$pk=30;
+				} else {
+					$str=$str."\r\n  Тип издания: отечественное";
+					$pk=60;
+				}
+				$number_of_authors = (0+mysql_result($q, $c, 4));
+				$str=$str."\r\nЧисло авторов: ".$number_of_authors;
+				if (mysql_result($q, $c, 5) == '1'){//preprint
+					$str=$str."\r\nТип материала: препринт\r\n";
+					$prnd = 4;
+					$prnd_str = "4";
+					$str=$str."\r\nПРНД: $prnd\r\n";
+				} else {
+					$str=$str."\r\nТип материала: статья\r\n";
+					$prnd_str = mysql_result($q, $c, 3)."*".$pk."/".mysql_result($q, $c, 4);
+					$prnd = (0+mysql_result($q, $c, 3))*$pk/$number_of_authors;
+					$prnd = round($prnd, 3);
+					$str=$str."\r\nПРНД: $prnd_str = $prnd\r\n";						
+				}
+				
 				$sum += $prnd;
 				if ($first)
 					$first = false;

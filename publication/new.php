@@ -59,7 +59,16 @@
 						
 				?>
 				<br>
-				
+				<div class="input-group">
+					<div class="input-group-addon">Тип:</div>
+					<span class="input-group-addon">
+						<input type="radio" required name="preprint" value="true"> Препринт
+					</span>
+					<span class="input-group-addon">
+						<input type="radio" required name="preprint" value="false"> Статья
+					</span>
+      			</div>		
+				<br>
 				<div class="input-group"> 
 					<input class="form-control" required name="title" size="45" type="text" placeholder="Название" <?php echo $name_pattern; ?> ><br>
 				</div><br>
@@ -67,13 +76,6 @@
 		 			<div class="input-group-addon">Полное количество авторов:</div>
 		 			<input class="form-control" required name="count_all" type="number" min=<?php echo "'$count'";?> max="50">
 				</div>
-				<div class="input-group">
-		 			<div class="input-group-addon">Год издания:</div>
-		 			<?php
-					$str = '<input class="form-control" required name="year" type="number" min="1990" max="'.date("Y").'">';
-					echo $str;
-				?>
-				</div>			
 				
 				<div class="input-group">	
 					<div class="input-group-addon">Издание: </div>
@@ -95,7 +97,14 @@
 						
 						echo $str;
 					?>
-				</div><br>
+				</div>
+				<div class="input-group">
+		 			<div class="input-group-addon">Год издания:</div>
+		 			<?php
+					$str = '<input class="form-control" required name="year" type="number" min="1990" max="'.date("Y").'">';
+					echo $str;
+				?>
+				</div>	<br>
 				<div class="input-group">	
 					<textarea class="form-control" name="info" rows="4" cols="40" placeholder="Полная библиографическая ссылка:"></textarea>
 				</div>
