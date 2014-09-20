@@ -101,8 +101,9 @@ if (isset($_POST['view'])){
 				} else{
 					$str=$str."\r\nТип материала: статья\r\n";
 					if( $is_low){
-						$prnd_str = mysql_result($q, $c, 3)."/".$number_of_authors;
+						$prnd_str = "8/".$number_of_authors;
 						$prnd = 8/$number_of_authors;
+						$prnd = round($prnd, 3);
 						$str = $str."\r\nПРНД: $prnd\r\n";
 					} else{
 						$prnd_str = mysql_result($q, $c, 3)."*".$pk."/".$number_of_authors;
