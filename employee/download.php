@@ -95,16 +95,17 @@ if (isset($_POST['view'])){
 				
 				if (mysql_result($q, $c, 5) == '1'){//preprint
 					$str = $str."\r\nТип материала: препринт\r\n";
-					$prnd = 4;
-					$prnd_str = "4";
-					$str = $str."\r\nПРНД: $prnd\r\n";
+					$prnd_str = "4/".$number_of_authors;
+					$prnd = 4/$number_of_authors;
+					$prnd = round($prnd, 3);
+					$str = $str."\r\nПРНД: $prnd_str = $prnd\r\n";
 				} else{
 					$str=$str."\r\nТип материала: статья\r\n";
 					if( $is_low){
 						$prnd_str = "8/".$number_of_authors;
 						$prnd = 8/$number_of_authors;
 						$prnd = round($prnd, 3);
-						$str = $str."\r\nПРНД: $prnd\r\n";
+						$str = $str."\r\nПРНД: $prnd_str = $prnd\r\n";
 					} else{
 						$prnd_str = mysql_result($q, $c, 3)."*".$pk."/".$number_of_authors;
 						$prnd = (0+mysql_result($q, $c, 3))*$pk/$number_of_authors;
