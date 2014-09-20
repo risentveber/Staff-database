@@ -96,15 +96,48 @@ CREATE TABLE IF NOT EXISTS `staff_database`.`authors-publications`
 );
 
 -- -----------------------------------------------------
+-- Table `staff_database`.`activity_types`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `staff_database`.`activity_types`
+(
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`type_name` VARCHAR(45) NOT NULL,
+	`activity_coefficient` DOUBLE NOT NULL DEFAULT 1.0,
+
+	PRIMARY KEY (`id`)
+);
+
+-- -----------------------------------------------------
 -- Table `staff_database`.`activities`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `staff_database`.`activities`
 (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`activity_name` VARCHAR(45) NOT NULL,
-	`activity_coefficient` DOUBLE NOT NULL DEFAULT 1.0,
-	`description` VARCHAR(200) NULL,
+	`number_of_participants` INT NOT NULL,
+	`type_id` INT NOT NULL,
+	`employee_id` INT NOT NULL,
 
-	CONSTRAINT `fk_employee_sector` FOREIGN KEY (`sector_id`) REFERENCES `staff_database`.`sectors` (`id`)
+	PRIMARY KEY (`id`),
+	CONSTRAINT `fk_activity_activity_type` FOREIGN KEY (`type_id`) REFERENCES `staff_database`.`activity_types` (`id`),
+	CONSTRAINT `fk_activity_employee` FOREIGN KEY (`employee_id`) REFERENCES `staff_database`.`employees` (`id`)
 );
+
+INSERT INTO `staff_database`.`activity_types`
+	(`type_name`, `activity_coefficient`)
+VALUES
+	("устный международный доклад", 6),
+	("устный отечественный доклад", 4),
+	("пленарный международный доклад", 30),
+	("пленарный отечественный доклад", 20),
+	("курс лекций читаемый впервые", 30),
+	("доработка курса лекций", 8),
+	("семестр курса практических занятий", 8),
+	("патент", 20),
+	("медаль на выставке", 10),
+	("диплом на выставке", 10),
+	("руководство аспирантом", 30),
+	("руководство дипломником", 10)
+;
+			
 

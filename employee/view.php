@@ -59,7 +59,7 @@
 					$str = $str.'<tr><th>Лаборатория</th><td><a href="/sector/view.php?sector_id='.$sector_id.'"'.">$sector</a></td></tr>\n";
 					$str = $str."</table>\n";
 					echo $str;
-					
+					}
 					$q = mysql_query(
 						"SELECT `publication_name`, `year`, `publication_id`
 						FROM `authors-publications`
@@ -75,17 +75,43 @@
 
 					$rows = mysql_num_rows($q);
 					if ($rows == 0)
-						echo "<br><p>В пуликационной деятельности замечен не был</p>\n";
+						echo "<br><p>В публикационной деятельности замечен не был</p>\n";
 					else{
 	
 						for ($c = 0; $c < $rows; $c++) {
 							$str=$str.'<tr><td><a href="/publication/view.php?publication_id='.mysql_result($q, $c, 2).'">'.mysql_result($q, $c, 0).'</a></td><td>'.mysql_result($q, $c, 1)."</td></tr>\n";
 						}
 					
+						$str = $str."\n</table>";
+						echo $str;
+					}
+					$str = "";
+					$q = mysql_query(
+						"SELECT `activity_name`, `type_name`
+						FROM `activities`
+						LEFT JOIN `activity_types`
+						ON `type_id` = `activity_types`.`id`
+						WHERE `employee_id` = $employee_id;"
+						);
+
+					$unit = mysql_result($q, 0, 0);
+
+					$str = "<br><table><caption>Другие виды деятельности</caption>\n";
+					$str = $str."<tr><th>Название</th><th>Тип</th></tr>\n";
+
+					$rows = mysql_num_rows($q);
+					if ($rows == 0)
+						echo "<br><p>В прочей деятельности замечен не был</p>\n";
+					else{
+	
+						for ($c = 0; $c < $rows; $c++) {
+							$str=$str.'<tr><td>'.mysql_result($q, $c, 0).'</td><td>'.mysql_result($q, $c, 1)."</td></tr>\n";
+						}
+					
 					$str = $str."\n</table>";
 					echo $str;
 					}
-				}
+					
 			?>
 			<br>
 			<form class="form-inline" action="download.php" method="post">

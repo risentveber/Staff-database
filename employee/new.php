@@ -47,14 +47,8 @@
 					<textarea class="form-control" name="info" rows="4" cols="44" placeholder="Дополнительная информация"></textarea><br>
 				</div><br>
 			 	
-		 		<div class="input-group">
-		 			<div class="input-group-addon">Коэффициент:</div>
-					<input class="form-control" required name="k" type="number" step="0.5" min="1" max="2">
-				</div>
 			 	<div class="input-group">			
-				<?php
-					$unit_id = $_POST['unit_id'];
-		
+				<?php		
 					$str ="\n<option></option>\n";
 
 					$q = mysql_query(
@@ -62,7 +56,6 @@
 						FROM `sectors`
 						LEFT JOIN `units`
 						ON `unit_id` = `units`.`id`
-						WHERE `units`.`id` = $unit_id
 						ORDER BY `sector_name`;"
 						);
 
@@ -77,6 +70,10 @@
 					echo '<select required name="sector_id" class="form-control">';
 					echo $str;
 				?>
+				</div><br>
+				<div class="input-group">
+		 			<div class="input-group-addon">Коэффициент:</div>
+					<input class="form-control" required name="k" type="number" step="0.5" min="1" max="2">
 				</div>
 				
 				<br><br>				

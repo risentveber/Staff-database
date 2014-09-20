@@ -21,7 +21,7 @@
 			<div class="container">
 				<br>
 				<div class="btn-group-vertical">
-					<a class="btn btn-default" href="/employee/new_pre.php">Добавить сотрудника</a>
+					<a class="btn btn-default" href="/employee/new.php">Добавить сотрудника</a>
 					<a class="btn btn-default" href="/unit/new.php">Добавить отдел</a>
 					<a class="btn btn-default" href="/publication/new_pre.php">Добавить публикацию</a>
 					<a class="btn btn-default" href="/edition/new.php">Добавить издание</a>

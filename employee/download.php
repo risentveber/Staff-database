@@ -56,15 +56,18 @@ if (isset($_POST['view'])){
 	$unit = mysql_result($q, 0, 0);
 
 	$rows = mysql_num_rows($q);
+
 	$first = true;
+	$sum = 0;
+	$sum_str = "";
 
 	if ($rows == 0)
-		echo "В публикационной деятельности замечен не был\r\n";
+		echo "В публикационной деятельности замечен не был\r\n\r\n";
 	else{
 		$str = "##########################################################################\r\n";
 		$str = $str."Публикации\r\n";
 		$str = $str."##########################################################################\r\n";
-		$sum = 0;
+		
 		$sum_str = "";
 
 		for ($c = 0; $c < $rows; $c++){
@@ -87,7 +90,7 @@ if (isset($_POST['view'])){
 					$str=$str."\r\nПРНД: $prnd\r\n";
 				} else {
 					$str=$str."\r\nТип материала: статья\r\n";
-					$prnd_str = mysql_result($q, $c, 3)."*".$pk."/".mysql_result($q, $c, 4);
+					$prnd_str = mysql_result($q, $c, 3)."*".$pk."/".$number_of_authors;
 					$prnd = (0+mysql_result($q, $c, 3))*$pk/$number_of_authors;
 					$prnd = round($prnd, 3);
 					$str=$str."\r\nПРНД: $prnd_str = $prnd\r\n";						
@@ -103,9 +106,49 @@ if (isset($_POST['view'])){
 				
 		}
 		echo $str;
-		echo "\r\nИтого ПРНД: $sum_str = $sum";
-
 	}
+	//************************************************************************************************************
+	$q = mysql_query(
+		"SELECT `activity_name`, `number_of_participants` ,`type_name`, `activity_coefficient`
+		FROM `activities`
+		LEFT JOIN `activity_types`
+		ON `type_id` = `activity_types`.`id` 
+		WHERE `employee_id` = $employee_id;"
+		);
+
+	$rows = mysql_num_rows($q);
+
+	if ($rows == 0)
+		echo "В прочей деятельности замечен не был\r\n";
+	else{
+		$str = "##########################################################################\r\n";
+		$str = $str."Другие виды деятельности\r\n";
+		$str = $str."##########################################################################\r\n";
+
+		for ($c = 0; $c < $rows; $c++){
+			$number = (0+mysql_result($q, $c, 1));
+			$prnd_str = mysql_result($q, $c, 3)."/".$number;
+			$prnd = (0+mysql_result($q, $c, 3))/$number;
+			$prnd = round($prnd, 3);
+
+			$str = $str."\r\n        Название: ".mysql_result($q, $c, 0);
+			$str = $str."\r\n             Тип: ".mysql_result($q, $c, 2);
+			$str = $str."\r\nЧисло участников: ".$number;			
+			$str = $str."\r\n\r\nПРНД: $prnd_str = $prnd\r\n";						
+			
+			$sum += $prnd;
+			if ($first)
+				$first = false;
+			else
+				$sum_str = $sum_str." + ";
+			$sum_str = $sum_str."$prnd";
+				
+		}
+		echo $str;
+	}
+	echo "--------------------------------------------------------------------------\r\n";;
+	echo "\r\nИтого ПРНД: $sum_str = $sum";
+
 }
 
 ?>
