@@ -71,29 +71,45 @@ if (isset($_POST['view'])){
 		$sum_str = "";
 
 		for ($c = 0; $c < $rows; $c++){
-				$str=$str."\r\n     Название: ".mysql_result($q, $c, 0);
-				$str=$str."\r\n          Год: ".mysql_result($q, $c, 1);
-				$str=$str."\r\n      Издание: ".mysql_result($q, $c, 2);
+				$number_of_authors = (0+mysql_result($q, $c, 4));
+				$str = $str."\r\n     Название: ".mysql_result($q, $c, 0);
+				$str = $str."\r\n          Год: ".mysql_result($q, $c, 1);
+				$str = $str."\r\n      Издание: ".mysql_result($q, $c, 2);
+				$str = $str."\r\nЧисло авторов: ".$number_of_authors;
+
+				$impact_factor = mysql_result($q, $c, 3);
+				$is_low = false;
+
 				if(mysql_result($q, $c, 6) == '1'){
 					$str=$str."\r\n  Тип издания: зарубежное";
 					$pk=30;
+					if ($impact_factor < 0.27 )
+						$is_low = true;
 				} else {
 					$str=$str."\r\n  Тип издания: отечественное";
 					$pk=60;
+					if ($impact_factor < 0.133 )
+						$is_low = true;
 				}
-				$number_of_authors = (0+mysql_result($q, $c, 4));
-				$str=$str."\r\nЧисло авторов: ".$number_of_authors;
+				
+				
 				if (mysql_result($q, $c, 5) == '1'){//preprint
-					$str=$str."\r\nТип материала: препринт\r\n";
+					$str = $str."\r\nТип материала: препринт\r\n";
 					$prnd = 4;
 					$prnd_str = "4";
-					$str=$str."\r\nПРНД: $prnd\r\n";
-				} else {
+					$str = $str."\r\nПРНД: $prnd\r\n";
+				} else{
 					$str=$str."\r\nТип материала: статья\r\n";
-					$prnd_str = mysql_result($q, $c, 3)."*".$pk."/".$number_of_authors;
-					$prnd = (0+mysql_result($q, $c, 3))*$pk/$number_of_authors;
-					$prnd = round($prnd, 3);
-					$str=$str."\r\nПРНД: $prnd_str = $prnd\r\n";						
+					if( $is_low){
+						$prnd_str = mysql_result($q, $c, 3)."/".$number_of_authors;
+						$prnd = 8/$number_of_authors;
+						$str = $str."\r\nПРНД: $prnd\r\n";
+					} else{
+						$prnd_str = mysql_result($q, $c, 3)."*".$pk."/".$number_of_authors;
+						$prnd = (0+mysql_result($q, $c, 3))*$pk/$number_of_authors;
+						$prnd = round($prnd, 3);
+						$str = $str."\r\nПРНД: $prnd_str = $prnd\r\n";
+					}						
 				}
 				
 				$sum += $prnd;
@@ -101,8 +117,9 @@ if (isset($_POST['view'])){
 					$first = false;
 				else
 					$sum_str = $sum_str." + ";
-				$str = $str."--------------------------------------------------------------------------\r\n";
 				$sum_str = $sum_str."$prnd";
+				$str = $str."--------------------------------------------------------------------------\r\n";
+				
 				
 		}
 		echo $str;
