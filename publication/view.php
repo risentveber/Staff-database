@@ -29,7 +29,7 @@
 					$publication_id = $_REQUEST['publication_id'];
 
 					$q = mysql_query(
-						"SELECT `publication_name`,`year`, `edition_name`
+						"SELECT `publication_name`,`year`, `edition_name`, `full_bibliographic_reference`
 						FROM `publications`
 						LEFT JOIN `editions`
 						ON `edition_id` = `editions`.`id`
@@ -39,10 +39,14 @@
 					$title = mysql_result($q, 0, 0);
 					$year = mysql_result($q, 0, 1);
 					$edition = mysql_result($q, 0, 2);
+					$info = mysql_result($q, 0, 3);
 				
 					echo "<h3>$title</h3>\n";
 					echo "<h4>Год издания: $year</h4>\n";
 					echo "<h4>Издательство: $edition</h4>\n";
+					if ($info != "")
+						echo "<h4>Библиографическая ссылка: $info </h4>\n";
+
 
 					$q = mysql_query(
 						"SELECT `name`,`surname`,`employee_id`

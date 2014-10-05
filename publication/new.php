@@ -70,7 +70,7 @@
       			</div>		
 				<br>
 				<div class="input-group"> 
-					<input class="form-control" required name="title" size="45" type="text" placeholder="Название" <?php echo $name_pattern; ?> ><br>
+					<input class="form-control" required name="title" size="100" type="text" placeholder="Название" <?php echo $name_pattern; ?> ><br>
 				</div><br>
 				<div class="input-group">
 		 			<div class="input-group-addon">Полное количество авторов:</div>

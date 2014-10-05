@@ -28,19 +28,29 @@
 			if (isset($_POST['add'])){         
 				$activity_name = pre_string($_POST['activity_name']);                   
 				$type_id = $_POST['type_id']; 
-				$employee_id = $_POST['employee_id'];
 				$number = $_POST['number'];
        
 				$q = mysql_query(
 					"INSERT INTO `activities`
-					(`activity_name`,`type_id`,`employee_id`, `number_of_participants` )
-					VALUES ($activity_name, $type_id, $employee_id, $number );"
+					(`activity_name`,`type_id`, `number_of_participants` )
+					VALUES ($activity_name, $type_id, $number );"
 					);
-				
-				if ($q)
-					print_success_message("Спасибо, $activity_name добавлен(а) в базе данных");  
-				else
-					print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error());  
+
+				if ($q){
+					$count = 0;
+					$activity_id = mysql_insert_id();
+					while ( isset($_POST['name'.++$count]) ) {
+						$employee_id = $_POST['name'.$count];
+						$q = mysql_query(
+							"INSERT INTO `authors-activities`
+							(`employee_id`, `activity_id`)
+							VALUES ($employee_id, $activity_id);"
+							); 
+					}					
+					print_success_message("Публикация $title зарегестрирована в базе данных"); 
+				}else
+					print_error_message("Произошла ошибка ".mysql_errno()." ".mysql_error()."</p>"); 
+					  
 			}
 		?>
 		

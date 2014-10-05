@@ -13,7 +13,7 @@ if (isset($_POST['view'])){
 	$surname = mysql_result($q, 0, 0);
 	$patronymic = mysql_result($q, 0, 2);
 	$sector_id = mysql_result($q, 0, 3);
-	$k = mysql_result($q, 0, 4);
+	$employee_k = mysql_result($q, 0, 4);
 
 	$filename = $surname."_".$name.".txt";
 
@@ -129,9 +129,11 @@ if (isset($_POST['view'])){
 	//************************************************************************************************************
 	$q = mysql_query(
 		"SELECT `activity_name`, `number_of_participants` ,`type_name`, `activity_coefficient`
-		FROM `activities`
+		FROM `authors-activities`
+		LEFT JOIN `activities`
+		ON `activity_id` = `activities`.`id`
 		LEFT JOIN `activity_types`
-		ON `type_id` = `activity_types`.`id` 
+		ON `type_id` = `activity_types`.`id`
 		WHERE `employee_id` = $employee_id;"
 		);
 
@@ -166,7 +168,10 @@ if (isset($_POST['view'])){
 		echo $str;
 	}
 	echo "--------------------------------------------------------------------------\r\n";;
-	echo "\r\nИтого ПРНД: $sum_str = $sum";
+	
+	echo "\r\nВсего ПРНД: $sum_str = $sum";
+	echo "\r\nС учетом личного коэффициента:";
+	echo "\r\nИтого ПРНД: $sum*$employee_k = ".($sum*$employee_k);
 
 }
 

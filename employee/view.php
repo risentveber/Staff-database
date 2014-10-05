@@ -29,7 +29,7 @@
 					$employee_id = $_REQUEST['employee_id'];
 
 					$q = mysql_query(
-						"SELECT `surname`, `name`, `patronymic`, `sector_id`, `id` 
+						"SELECT `surname`, `name`, `patronymic`, `sector_id`, `id`, `info`
 						FROM `employees`
 						WHERE `id` = $employee_id;"
 						);
@@ -39,6 +39,7 @@
 					$patronymic = mysql_result($q, 0, 2);
 					$sector_id = mysql_result($q, 0, 3);
 					$id = mysql_result($q, 0, 4);
+					$info = mysql_result($q, 0, 5);
 
 					$q = mysql_query(
 						"SELECT `sector_name`, `unit_name` 
@@ -52,11 +53,13 @@
 					$sector = mysql_result($q, 0, 0);
 					
 					$str = "<table><caption>Личная информация</caption>\n";
-					$str = $str."<tr><th>Имя</th><td>$name</td></tr>\n";
 					$str = $str."<tr><th>Фамилия</th><td>$surname</td></tr>\n";
+					$str = $str."<tr><th>Имя</th><td>$name</td></tr>\n";
 					$str = $str."<tr><th>Отчество</th><td>$patronymic</td></tr>\n";
 					$str = $str."<tr><th>Отдел</th><td>$unit</td></tr>\n";
 					$str = $str.'<tr><th>Лаборатория</th><td><a href="/sector/view.php?sector_id='.$sector_id.'"'.">$sector</a></td></tr>\n";
+					if ($info != "")
+						$str = $str."<tr><th>Дополнительно</th><td>$info</td></tr>\n";
 					$str = $str."</table>\n";
 					echo $str;
 					}
@@ -88,7 +91,9 @@
 					$str = "";
 					$q = mysql_query(
 						"SELECT `activity_name`, `type_name`
-						FROM `activities`
+						FROM `authors-activities`
+						LEFT JOIN `activities`
+						ON `activity_id` = `activities`.`id`
 						LEFT JOIN `activity_types`
 						ON `type_id` = `activity_types`.`id`
 						WHERE `employee_id` = $employee_id;"
@@ -105,7 +110,7 @@
 					else{
 	
 						for ($c = 0; $c < $rows; $c++) {
-							$str=$str.'<tr><td>'.mysql_result($q, $c, 0).'</td><td>'.mysql_result($q, $c, 1)."</td></tr>\n";
+							$str = $str.'<tr><td>'.mysql_result($q, $c, 0).'</td><td>'.mysql_result($q, $c, 1)."</td></tr>\n";
 						}
 					
 					$str = $str."\n</table>";

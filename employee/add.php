@@ -29,15 +29,16 @@
 				$name_ru = pre_string($_POST['name_ru']);
 				$surname_ru = pre_string($_POST['surname_ru']);         
 				$patronymic_ru = pre_string($_POST['patronymic_ru']);         
-				$name_en = pre_string($_POST['name_en']);         
+				$name_en = pre_string($_POST['name_en']);  
+				$info = pre_string($_POST['info']);       
 				$surname_en = pre_string($_POST['surname_en']);
 				$k = $_POST['k'];   
 				$sector_id = $_POST['sector_id']; 
        
 				$q = mysql_query(
 					"INSERT INTO `employees`
-					(`surname`, `name`, `patronymic`, `en_surname`, `en_name`, `coefficient`, `sector_id`)
-					VALUES ($surname_ru, $name_ru, $patronymic_ru, $surname_en, $name_en, $k, $sector_id);"
+					(`surname`, `name`, `patronymic`, `en_surname`, `en_name`, `coefficient`, `sector_id`, `info`)
+					VALUES ($surname_ru, $name_ru, $patronymic_ru, $surname_en, $name_en, $k, $sector_id, $info);"
 					);
 				
 				if ($q)

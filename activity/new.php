@@ -26,31 +26,8 @@
 		<div class="container">
 			<form class="form-inline" action="add.php" method="post">
 				<H4>Информация о деятельности:</H4>  
-
 				<div class="input-group">
-					<input placeholder="Название деятельности" class="form-control" autofocus required name="activity_name" size="45" type="text" <?php echo $name_pattern; ?> ><br>
-				</div><br>
-				<div class="input-group">	
-					<div class="input-group-addon">Участник:</div>
-					<select class="form-control" required name="employee_id" >
-						<option></option>
-						<?php
-						$str ='';
-
-							$q = mysql_query(
-								"SELECT `id`, `name`, `surname`
-								FROM `employees`
-								ORDER BY `surname`, `name`;"
-								);
-
-							$rows = mysql_num_rows($q);
-							$fields = mysql_num_fields($q);
-							for ($c = 0; $c < $rows; $c++) {
-								$str=$str.'<option value = "'.mysql_result($q, $c, 0).'">'.mysql_result($q, $c, 2).' '.mysql_result($q, $c, 1).'</option>';
-							}
-								echo $str;
-						?>
-					</select>
+					<input placeholder="Название деятельности" class="form-control" autofocus required name="activity_name" size="100" type="text" <?php echo $name_pattern; ?> ><br>
 				</div>
 				<br>
 				<div class="input-group">	
@@ -76,9 +53,43 @@
 					</select>
 				</div>
 				<br>
+				<div class="input-group">	
+					<?php 
+					if (isset($_POST['add'])){         
+						$count = $_POST['count'];
+						$count = 0 + $count;              
+					}
+					echo "\n";
+					//***************************************************************************************
+					$str ='<option></option>';
+
+					$q = mysql_query(
+						"SELECT `id`, `name`, `surname`
+						FROM `employees`
+						ORDER BY `surname`, `name`;"
+						);
+
+					$rows = mysql_num_rows($q);
+					$fields = mysql_num_fields($q);
+					for ($c = 0; $c < $rows; $c++) {
+						$str=$str.'<option value = "'.mysql_result($q, $c, 0).'">'.mysql_result($q, $c, 2).' '.mysql_result($q, $c, 1).'</option>';
+					}
+					$str=$str."</select></div><br>\n\n";
+					//****************************************************************************************
+					for ($c=1; $c<=$count; $c++){
+						$tname = 'name'.(string)$c;
+						echo '<div class="input-group">	<div class="input-group-addon">Участник '.(string)$c.':</div>';
+						echo'<select class="form-control" required name="'.(string)$tname.'" >';
+						echo $str;
+					}
+						
+				?>
+				</div>
+				
+				<br>
 				<div class="input-group">
 			 			<div class="input-group-addon">Количество участников:</div>
-			 			<input class="form-control" required name="number" type="number" min="1" max="10">
+			 			<input class="form-control" required name="number" type="number" min=<?php echo "'$count'";?> max="10">
 				</div>
 				<br>
 				<br>		
