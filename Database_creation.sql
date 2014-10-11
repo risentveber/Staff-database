@@ -1,5 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS `staff_database` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `mydb` ;
+USE `staff_database` ;
 
 -- -----------------------------------------------------
 -- Table `staff_database`.`units`

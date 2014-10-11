@@ -62,8 +62,14 @@
 				
 					echo $str;
 				}
-			}
+			
 			?>
+		<br>
+		<form class="form-inline" action="download.php" method="post">
+			<input class="btn btn-success" name="view" type="submit" value="Скачать отчет">
+			<input style="display:none" name="id" value=<?php echo '"'.$sector_id.'"';?>>
+		</form>
+		<?php  } ?>
 		<br>
 		</div>
 		</div>
